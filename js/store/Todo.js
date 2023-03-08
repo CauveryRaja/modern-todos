@@ -3,13 +3,24 @@ class TodoStore extends EventTarget {
         super();
 
         this.todos = [];
+        this.#load();
     }
 
-    #save() {
-        this.dispatchEvent(new CustomEvent('save'));
+    #load() {
+        const fromStorage = localStorage.getItem('todos');
+        if(fromStorage) {
+            this.todos = JSON.parse(fromStorage);
+        }
+        else {
+            localStorage.setItem('todos', '[]')
+        }
+
+        this.dispatchEvent(new CustomEvent('load'));
     }
 
     #add(todo) {
+        localStorage.setItem('todos', JSON.stringify(this.todos))
+        
         this.dispatchEvent(new CustomEvent('add', {
             detail: { todo }
         }));
@@ -24,7 +35,6 @@ class TodoStore extends EventTarget {
         this.todos.push(toAdd);
 
         this.#add(toAdd);
-        // this.#save();
     }
 
     removeItem(todo) {

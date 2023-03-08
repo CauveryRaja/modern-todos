@@ -54,7 +54,7 @@ const App = {
         });
 
         Todos.addEventListener('add', App.added);
-        // Todos.addEventListener('save', App.render);
+        Todos.addEventListener('load', App.render);
     },
     init() {
         console.log('init...')
