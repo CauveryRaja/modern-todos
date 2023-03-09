@@ -8,11 +8,21 @@ const App = {
         list: document.querySelector('[data-todo="list"]'),
         form: document.querySelector('form'),
     },
-    showInput(show) {
-        this.$.input.style.display = show ? 'block' : 'none';
+    showForm(show) {
+        this.$.formSection.style.display = show ? 'block' : 'none';
     },
     showList(show) {
         App.$.list.style.display = show ? 'block' : 'none';
+    },
+    switchTabs() {
+        if(window.location.hash === '#add') {
+            App.showForm(true);
+            App.showList(false);
+        }
+        else {
+            App.showList(true);
+            App.showForm(false);
+        }
     },
     render() {
         const list = Todos.todos.reduce((acc, todo) => {
@@ -52,6 +62,7 @@ const App = {
             Todos.addItem(formData.get('title'));
             event.preventDefault();
         });
+        window.addEventListener('hashchange', App.switchTabs);
 
         Todos.addEventListener('add', App.added);
         Todos.addEventListener('load', App.render);
@@ -60,6 +71,7 @@ const App = {
         console.log('init...')
         App.bindEvents();
         App.render();
+        App.switchTabs();
     }
 }
 
